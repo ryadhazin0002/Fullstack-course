@@ -1,4 +1,5 @@
-import {dish} from '../models/dishModel.js';
+import {dishModel, DishesModel} from '../models/dishModel.js';
+
 
 
 
@@ -9,16 +10,16 @@ export const controller = {}
 
 controller.getAllDishes = async (req, res) => {
   try {
-    const recipes = await dish.find();
+    const dishes = await DishesModel.getAllDishes();
     
-    if (recipes.length === 0) {
+    if (dishes.length === 0) {
       return res.status(404).json({ 
         message: "No recipes found",
         suggestion: "Try adding recipes via POST /recipes"
       });
     }
     
-    res.json(recipes);
+    res.json(dishes);
   } catch (error) {
     res.status(500).json({ 
       error: "Server error",
@@ -29,16 +30,16 @@ controller.getAllDishes = async (req, res) => {
 
 controller.getDishById = async (req, res) => {
   try {
-    const recipe = await dish.findOne({ id: req.params.id });
+    const dish = await DishesModel.getDishById(req.params.id);
     
-    if (!recipe) {
+    if (!dish) {
       return res.status(404).json({ 
         message: "Recipe not found",
-        availableIds: (await dish.find().distinct("id")).sort() 
+        availableIds: (await dishModel.find().distinct("_id")).sort() 
       });
     }
     
-    res.json(recipe);
+    res.json(dish);
   } catch (error) {
     res.status(500).json({ 
       error: "Server error",
@@ -49,19 +50,9 @@ controller.getDishById = async (req, res) => {
 
 controller.addNewDish = async (req, res) => {
   try {
-    const newRecipe = new dish({
-      id: req.body.id,
-      name: req.body.name,
-      ingredients: req.body.ingredients,
-      preparationSteps: req.body.preparationSteps,
-      cookingTime: req.body.cookingTime,
-      origin: req.body.origin,
-      spiceLevel: req.body.spiceLevel,
-      difficulty: req.body.difficulty,
-    });
-
-    await newRecipe.save();;
-    res.status(201).json(newRecipe);
+    const dish = req.body;
+    const newDish = DishesModel.addNewDish(dish);
+    res.status(201).json(newDish);
   } catch (error) {
     res.status(400).json({ 
       message: "Validation failed",
@@ -72,10 +63,13 @@ controller.addNewDish = async (req, res) => {
 
 controller.modifyDish = async (req, res) => {
   try {
-    const updatedRecipe = await dish.findOneAndUpdate(
-      { id: req.params.id },
+    const updatedRecipe = await dishModel.findByIdAndUpdate(
+      req.params.id,  // Just pass the ID directly
       { $set: req.body },
-      { new: true, runValidators: true }
+      { 
+        new: true,         // Return the updated document
+        runValidators: true // Run schema validators on update
+      }
     );
 
     if (!updatedRecipe) {
@@ -94,7 +88,7 @@ controller.modifyDish = async (req, res) => {
 
 controller.deleteDish = async (req, res) => {
   try {
-    const result = await dish.findOneAndDelete({ id: req.params.id });
+    const result = await dishModel.findOneAndDelete({ id: req.params.id });
     
     if (!result) {
       return res.status(404).json({ message: "Recipe not found" });
