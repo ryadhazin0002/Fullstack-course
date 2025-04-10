@@ -1,4 +1,4 @@
-import {dishModel, DishesModel} from '../models/dishModel.js';
+import {DishesModel} from '../models/dishModel.js';
 
 
 
@@ -34,8 +34,7 @@ controller.getDishById = async (req, res) => {
     
     if (!dish) {
       return res.status(404).json({ 
-        message: "Recipe not found",
-        availableIds: (await dishModel.find().distinct("_id")).sort() 
+        message: "Recipe not found" 
       });
     }
     
@@ -52,7 +51,9 @@ controller.addNewDish = async (req, res) => {
   try {
     const dish = req.body;
     const newDish = DishesModel.addNewDish(dish);
-    res.status(201).json(newDish);
+    res.status(201).json({
+      message: "New Dish added",
+      addedDish: newDish});
   } catch (error) {
     res.status(400).json({ 
       message: "Validation failed",
@@ -62,21 +63,15 @@ controller.addNewDish = async (req, res) => {
 }
 
 controller.modifyDish = async (req, res) => {
-  try {
-    const updatedRecipe = await dishModel.findByIdAndUpdate(
-      req.params.id,  // Just pass the ID directly
-      { $set: req.body },
-      { 
-        new: true,         // Return the updated document
-        runValidators: true // Run schema validators on update
-      }
-    );
-
-    if (!updatedRecipe) {
-      return res.status(404).json({ message: "Recipe not found" });
+  const id = req.params.id;
+  const dishBody = req.body;
+  try{
+    const currentDish = await DishesModel.getDishById(id)
+    if (!currentDish) {
+      return res.status(404).json({ message: "Dish not found" });
     }
-
-    res.json(updatedRecipe);
+    const updatedDish = await DishesModel.updateDish(id, dishBody);
+    res.json(updatedDish);
   } catch (error) {
     res.status(400).json({ 
       error: "Update failed",
@@ -87,16 +82,16 @@ controller.modifyDish = async (req, res) => {
 
 
 controller.deleteDish = async (req, res) => {
+  const id = req.params.id;
   try {
-    const result = await dishModel.findOneAndDelete({ id: req.params.id });
-    
+    const result = await DishesModel.getDishById(id);
     if (!result) {
-      return res.status(404).json({ message: "Recipe not found" });
+      return res.status(404).json({ message: "Dish not found" });
     }
-    
+    const deletedDish = DishesModel.deleteDish(id);
     res.json({ 
-      message: "Recipe deleted successfully",
-      deletedRecipe: result 
+      message: "Dish deleted successfully",
+      deletedDish: deletedDish
     });
   } catch (error) {
     res.status(500).json({ 
