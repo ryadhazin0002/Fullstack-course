@@ -35,4 +35,10 @@ const dishSchema = new Schema({
 DatabaseService.dishModel = mongoose.model('dishes', dishSchema);
 
 
+DatabaseService.disconnect = () => {
+    mongoose.disconnect()
+    .then(() => console.log("Disconnected from MongoDB"))
+    .catch(error => console.log("Error disconnecting from DB", error));
+}
+
 export default DatabaseService;

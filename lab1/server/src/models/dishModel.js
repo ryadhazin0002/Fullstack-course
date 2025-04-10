@@ -3,7 +3,7 @@ import DatabaseService from "../service/databaseService.js";
 const { Schema } = mongoose;
 
 
-DatabaseService.connect();
+
 
 
 
