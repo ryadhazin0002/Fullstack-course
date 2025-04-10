@@ -1,4 +1,7 @@
 let recipes = []
+
+
+
 async function loadData() {
     const url = "http://localhost:5000/api/dishes";
     try {
@@ -13,13 +16,29 @@ async function loadData() {
 }
     }
 
-
+async function deleteRecipe(recipeId) {
+  try {
+    const response = await fetch(`http://localhost:5000/api/dishes/${recipeId}`, {
+      
+    method: 'DELETE',
+    });
+    if (response.ok) {
+    recipes = recipes.filter(r => r._id !== recipeId);
+    renderRecipes(recipes);
+    } else {
+      console.log(recipeId)
+    console.error('Failed to delete the recipe');
+    }
+  } catch (error) {
+    console.error('Error deleting the recipe:', error);
+  }
+}
 
 
 
 function renderRecipes(recipes) {
     const recipesContainer = document.getElementById("recipe-container");
-    recipesContainer.innerHTML = ""; // Clear previous content
+    recipesContainer.innerHTML = ""; 
 
     
     
@@ -29,7 +48,7 @@ function renderRecipes(recipes) {
 
           
           const recipeDiv = document.createElement('div');
-          recipeDiv.classList.add('recipe-card'); // You can add CSS classes for styling
+          recipeDiv.classList.add('recipe-card'); 
 
           const nameHeading = document.createElement('h2');
           nameHeading.textContent = recipe.name;
@@ -70,19 +89,7 @@ function renderRecipes(recipes) {
             deleteButton.textContent = 'Delete';
             deleteButton.classList.add('delete-button');
             deleteButton.addEventListener('click', async () => {
-            try {
-              const response = await fetch(`http://localhost:5000/api/dishes/${recipe.id}`, {
-              method: 'DELETE',
-              });
-              if (response.ok) {
-              recipes = recipes.filter(r => r.id !== recipe.id);
-              renderRecipes(recipes);
-              } else {
-              console.error('Failed to delete the recipe');
-              }
-            } catch (error) {
-              console.error('Error deleting the recipe:', error);
-            }
+              deleteRecipe(recipe._id)
             });
 
 
