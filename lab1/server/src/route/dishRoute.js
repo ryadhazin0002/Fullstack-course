@@ -10,7 +10,9 @@ router.post("/dishes", controller.addNewDish);
 router.get("/dishes", controller.getAllDishes);
 
 // READ - Get single recipe
-router.get("/dishes/:id", controller.getDishById);
+router.get("/dish/:id", controller.getDishById);
+
+router.get("/dishes/:name", controller.getDishByName);
 
 // UPDATE - Modify recipe
 router.put("/dishes/:id", controller.modifyDish);

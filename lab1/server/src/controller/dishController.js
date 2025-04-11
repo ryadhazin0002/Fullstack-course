@@ -47,6 +47,26 @@ controller.getDishById = async (req, res) => {
   }
 }
 
+controller.getDishByName = async (req, res) => {
+  const name = req.params.name;
+  try {
+    const dish = await DishesModel.getDishByName(name);
+    
+    if (!dish) {
+      return res.status(404).json({ 
+        message: "Dish not found" 
+      });
+    }
+    
+    res.json(dish);
+  } catch (error) {
+    res.status(500).json({ 
+      error: "Server error",
+      details: error.message 
+    });
+  }
+}
+
 controller.addNewDish = async (req, res) => {
   try {
     const dish = req.body;

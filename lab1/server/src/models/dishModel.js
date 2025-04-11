@@ -31,6 +31,17 @@ DishesModel.getDishById = async (dishId) => {
 
 }
 
+DishesModel.getDishByName = async(name) => {
+  try{
+    const dish = DatabaseService.dishModel.findOne({"name": name});
+    return dish;
+  }
+  catch (error) {
+    console.log(error);
+    throw error; 
+  }
+}
+
 DishesModel.addNewDish = async (dish) => {
   try{
     const newDish = new DatabaseService.dishModel(dish);
