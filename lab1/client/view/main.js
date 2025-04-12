@@ -16,7 +16,12 @@ document.addEventListener('DOMContentLoaded', function() {
 async function loadData() {
     const url = "http://localhost:5000/api/dishes";
     try {
-        const response = await fetch(url);
+        const response = await fetch(url, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
@@ -26,6 +31,8 @@ async function loadData() {
         console.error("Error loading data:", error);
     }
 }
+
+
 
 // Function to delete a recipe
 async function deleteRecipe(recipeId) {
