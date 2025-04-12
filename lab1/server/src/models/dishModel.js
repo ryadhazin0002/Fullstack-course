@@ -39,16 +39,22 @@ DishesModel.getDishByName = async(name) => {
 }
 //add new dish
 DishesModel.addNewDish = async (dish) => {
-  try{
+  try {
+    // Check if dish with the same name already exists
+    const existingDish = await DatabaseService.dishModel.findOne({ name: dish.name });
+    
+    if (existingDish) {
+      throw new Error("Dish already exists"); // Will trigger 409 in controller
+    }
+
     const newDish = new DatabaseService.dishModel(dish);
     await newDish.save();
-    return dish;
-  }catch (error) {
+    return newDish; // Return the saved document (not just the input)
+  } catch (error) {
     console.log(error);
     throw error; 
   }
-
-}
+};
 
 
 //update dish

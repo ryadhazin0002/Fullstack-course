@@ -73,17 +73,27 @@ controller.getDishByName = async (req, res) => {
 controller.addNewDish = async (req, res) => {
   try {
     const dish = req.body;
-    const newDish = DishesModel.addNewDish(dish);
+    const newDish = await DishesModel.addNewDish(dish); // Added await
+    
     res.status(201).json({
       message: "New Dish added",
-      addedDish: newDish});
+      addedDish: newDish
+    });
   } catch (error) {
+    // Handle duplicate dish case
+    if (error.message === "Dish already exists") {
+      return res.status(409).json({ 
+        message: "Dish with this name already exists",
+      });
+    }
+    
+    // Other validation errors
     res.status(400).json({ 
       message: "Validation failed",
       error: error.message 
     });
-    }
-}
+  }
+};
 
 // update dish
 controller.modifyDish = async (req, res) => {
