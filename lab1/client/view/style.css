@@ -1,4 +1,4 @@
-
+/* Base body styling with dark theme */
 body {
     font-family: Arial, sans-serif;
     margin: 0;
@@ -7,13 +7,14 @@ body {
     color: #c9d1d9;
 }
 
+/* Main heading style */
 h1 {
     text-align: center;
     margin-top: 20px;
     color: #f0f6fc;
 }
 
-
+/* Grid container for recipe cards */
 #recipe-container {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
@@ -23,7 +24,7 @@ h1 {
     padding: 20px;
 }
 
-
+/* Individual recipe card styling */
 .recipe-card {
     position: relative;
     background-color: #161b22;
@@ -36,25 +37,28 @@ h1 {
     transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
+/* Hover effect for recipe cards */
 .recipe-card:hover {
     transform: translateY(-5px);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
     background-color: #1f2937;
 }
 
+/* Recipe title style */
 .recipe-card h2 {
     font-size: 1.5em;
     margin: 10px 0;
     color: #f0f6fc;
 }
 
+/* Recipe description text */
 .recipe-card p {
     font-size: 1em;
     color: #8b949e; 
     margin: 10px 0;
 }
 
-/* Button styles */
+/* Delete button styling */
 .recipe-card .delete-button {
     position: absolute;
     bottom: 10px;
@@ -68,10 +72,12 @@ h1 {
     transition: background-color 0.2s ease;
 }
 
+/* Delete button hover effect */
 .recipe-card .delete-button:hover {
     background-color: #f85149;
 }
 
+/* Update button styling */
 .recipe-card .update-button {
     position: absolute;
     bottom: 10px;
@@ -85,11 +91,12 @@ h1 {
     transition: background-color 0.2s ease;
 }
 
+/* Update button hover effect */
 .recipe-card .update-button:hover {
     background-color: #388bfd; 
 }
 
-
+/* Update form modal container */
 .update-form-container {
     position: fixed;
     top: 50%;
@@ -107,6 +114,7 @@ h1 {
     border: 1px solid #30363d;
 }
 
+/* Modal overlay background */
 .overlay {
     position: fixed;
     top: 0;
@@ -117,23 +125,27 @@ h1 {
     z-index: 1000;
 }
 
+/* Form layout styling */
 .update-form {
     display: flex;
     flex-direction: column;
     gap: 15px;
 }
 
+/* Form field grouping */
 .form-field {
     display: flex;
     flex-direction: column;
     gap: 5px;
 }
 
+/* Form label styling */
 .form-field label {
     font-weight: bold;
     color: #f0f6fc;
 }
 
+/* Input field styling */
 .form-input {
     padding: 8px;
     border: 1px solid #30363d;
@@ -143,22 +155,26 @@ h1 {
     color: #c9d1d9;
 }
 
+/* Input focus state */
 .form-input:focus {
     outline: none;
     border-color: #1f6feb;
     box-shadow: 0 0 0 3px rgba(31, 111, 235, 0.3);
 }
 
+/* Disabled input styling */
 .form-input:disabled {
     background-color: #161b22;
     color: #484f58;
 }
 
+/* Textarea specific styling */
 textarea.form-input {
     min-height: 100px;
     resize: vertical;
 }
 
+/* Button styles for edit/update actions */
 .edit-btn, .update-btn {
     padding: 5px 10px;
     margin-top: 5px;
@@ -167,16 +183,19 @@ textarea.form-input {
     cursor: pointer;
 }
 
+/* Edit button color */
 .edit-btn {
     background-color: #1f6feb;
     color: white;
 }
 
+/* Update button color */
 .update-btn {
-    background-color: #238636; /* GitHub green */
+    background-color: #238636;
     color: white;
 }
 
+/* Save button styling */
 .save-btn {
     padding: 10px 15px;
     background-color: #238636;
@@ -188,6 +207,7 @@ textarea.form-input {
     margin-top: 10px;
 }
 
+/* Cancel button styling */
 .cancel-btn {
     padding: 10px 15px;
     background-color: #da3633;
@@ -199,29 +219,33 @@ textarea.form-input {
     margin-top: 5px;
 }
 
+/* Button hover effects */
 .edit-btn:hover, .update-btn:hover, .save-btn:hover, .cancel-btn:hover {
     opacity: 0.9;
 }
 
-
+/* Custom scrollbar styling */
 ::-webkit-scrollbar {
     width: 10px;
 }
 
+/* Scrollbar track */
 ::-webkit-scrollbar-track {
     background: #0d1117;
 }
 
+/* Scrollbar thumb */
 ::-webkit-scrollbar-thumb {
     background: #30363d;
     border-radius: 5px;
 }
 
+/* Scrollbar thumb hover state */
 ::-webkit-scrollbar-thumb:hover {
     background: #484f58;
 }
 
-
+/* Footer styling */
 footer {
     background-color: #161b22;
     color: #8b949e;
@@ -230,6 +254,7 @@ footer {
     border-top: 1px solid #30363d;
 }
 
+/* Footer content container */
 .footer-content {
     max-width: 1200px;
     margin: 0 auto;
@@ -237,15 +262,18 @@ footer {
     padding: 0 20px;
 }
 
+/* Footer paragraph spacing */
 .footer-content p {
     margin: 5px 0;
 }
 
+/* Footer link styling */
 footer a {
     color: #58a6ff;
     text-decoration: none;
 }
 
+/* Footer link hover effect */
 footer a:hover {
     text-decoration: underline;
 }
