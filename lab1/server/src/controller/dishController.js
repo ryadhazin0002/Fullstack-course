@@ -4,10 +4,10 @@ import {DishesModel} from '../models/dishModel.js';
 
 
 
-
+//initialize the controller object
 export const controller = {}
 
-
+//get all dishes
 controller.getAllDishes = async (req, res) => {
   try {
     const dishes = await DishesModel.getAllDishes();
@@ -28,6 +28,7 @@ controller.getAllDishes = async (req, res) => {
   }
 }
 
+//get dish by id
 controller.getDishById = async (req, res) => {
   try {
     const dish = await DishesModel.getDishById(req.params.id);
@@ -47,6 +48,7 @@ controller.getDishById = async (req, res) => {
   }
 }
 
+//get dish by name
 controller.getDishByName = async (req, res) => {
   const name = req.params.name;
   try {
@@ -67,6 +69,7 @@ controller.getDishByName = async (req, res) => {
   }
 }
 
+// add new dish
 controller.addNewDish = async (req, res) => {
   try {
     const dish = req.body;
@@ -82,6 +85,7 @@ controller.addNewDish = async (req, res) => {
     }
 }
 
+// update dish
 controller.modifyDish = async (req, res) => {
   const id = req.params.id;
   const dishBody = req.body;
@@ -100,7 +104,7 @@ controller.modifyDish = async (req, res) => {
   }
 }
 
-
+// delete dish
 controller.deleteDish = async (req, res) => {
   const id = req.params.id;
   try {
