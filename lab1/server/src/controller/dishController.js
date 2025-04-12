@@ -19,7 +19,7 @@ controller.getAllDishes = async (req, res) => {
       });
     }
     
-    res.json(dishes);
+    res.json(dishes).status(200);
   } catch (error) {
     res.status(500).json({ 
       error: "Server error",
