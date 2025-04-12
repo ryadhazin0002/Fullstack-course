@@ -3,12 +3,12 @@ import { config } from '../config/database.js';
 const { Schema } = mongoose;
 import 'dotenv/config';
 
-
+// This is a service to connect to the database
 const DatabaseService = {};
 
 
 
-
+//Connect to the database function
 DatabaseService.connect = () => {
     const connectionKey = config.mongoURI;
     console.log("connecting to database ...");
@@ -21,6 +21,7 @@ DatabaseService.connect = () => {
     }
 }
 
+// Dish schema definition
 const dishSchema = new Schema({
     id: Number,
     name: String,
@@ -32,9 +33,10 @@ const dishSchema = new Schema({
     difficulty: String    // For Swedish Meatballs
 })
 
+// Define the schema for the dishes collection
 DatabaseService.dishModel = mongoose.model('dishes', dishSchema);
 
-
+// Disconnect from the database function
 DatabaseService.disconnect = () => {
     mongoose.disconnect()
     .then(() => console.log("Disconnected from MongoDB"))
