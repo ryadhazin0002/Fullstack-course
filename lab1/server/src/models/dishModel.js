@@ -1,15 +1,10 @@
-import mongoose from "mongoose";
 import DatabaseService from "../service/databaseService.js";
-const { Schema } = mongoose;
 
 
-
-
-
-
-
+//initialize the DishesModel
 export const DishesModel = {}
 
+//get all dishes
 DishesModel.getAllDishes = async () => {
   try{
     const dishes = DatabaseService.dishModel.find();
@@ -20,6 +15,7 @@ DishesModel.getAllDishes = async () => {
   }
 }
 
+//get dish by id
 DishesModel.getDishById = async (dishId) => {
   try{
     const dish = DatabaseService.dishModel.findById(dishId);
@@ -30,7 +26,7 @@ DishesModel.getDishById = async (dishId) => {
   }
 
 }
-
+//get dish by name
 DishesModel.getDishByName = async(name) => {
   try{
     const dish = DatabaseService.dishModel.findOne({"name": name});
@@ -41,7 +37,7 @@ DishesModel.getDishByName = async(name) => {
     throw error; 
   }
 }
-
+//add new dish
 DishesModel.addNewDish = async (dish) => {
   try{
     const newDish = new DatabaseService.dishModel(dish);
@@ -55,7 +51,7 @@ DishesModel.addNewDish = async (dish) => {
 }
 
 
-// In your model
+//update dish
 DishesModel.updateDish = async (id, body) => {
   try {
     const updatedDish = await DatabaseService.dishModel.findByIdAndUpdate(
@@ -84,7 +80,7 @@ DishesModel.updateDish = async (id, body) => {
   }
 };
 
-
+//delete dish
 DishesModel.deleteDish = async (id) => {
   try{
     const result = await DishesModel.getDishById(id);
