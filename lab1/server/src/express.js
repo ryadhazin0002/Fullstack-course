@@ -21,5 +21,5 @@ app.use((err, req, res, next) => {
     res.status(500).json({ error: "Something broke!" });
   });
 
-// Middleware to main route
+// Middleware to parse URL-encoded data
 app.use('/', router);
