@@ -40,8 +40,7 @@ A web application for managing and organizing your favorite recipes. This system
   ```bash
     npm install
 
-4 **Start the server**
+4. **Start the server**
 ```bash
   npm start
 
-  
