@@ -1,0 +1,166 @@
+[
+    {
+        "_id": "67f264da05b9a5d58571bbf9",
+        "name": "Beef Biryani (Personal Dish)",
+        "ingredients": [
+            "basmati rice",
+            "beef",
+            "yogurt",
+            "onions",
+            "garlic",
+            "ginger",
+            "biryani masala",
+            "saffron",
+            "milk",
+            "ghee",
+            "mint leaves",
+            "cilantro"
+        ],
+        "preparationSteps": [
+            "Marinate beef with yogurt and spices for 2 hours",
+            "Cook rice until 70% done",
+            "Layer rice and meat in a heavy pot",
+            "Add saffron milk and fried onions between layers",
+            "Seal pot with dough and cook on low heat for 30 minutes"
+        ],
+        "cookingTime": 120,
+        "origin": "India",
+        "spiceLevel": "Medium",
+        "difficulty": "Hard"
+    },
+    {
+        "_id": "67f264da05b9a5d58571bbfa",
+        "name": "Chocolate Chip Cookies",
+        "ingredients": [
+            "flour",
+            "butter",
+            "brown sugar",
+            "white sugar",
+            "eggs",
+            "vanilla extract",
+            "baking soda",
+            "salt",
+            "chocolate chips"
+        ],
+        "preparationSteps": [
+            "Cream butter and sugars",
+            "Add eggs and vanilla",
+            "Mix dry ingredients separately",
+            "Combine wet and dry ingredients",
+            "Fold in chocolate chips",
+            "Drop spoonfuls onto baking sheet",
+            "Bake at 375°F for 10-12 minutes"
+        ],
+        "cookingTime": 25,
+        "origin": "United States",
+        "spiceLevel": "None",
+        "difficulty": "Easy"
+    },
+    {
+        "_id": "67f264da05b9a5d58571bbfb",
+        "name": "Japanese Ramen",
+        "ingredients": [
+            "ramen noodles",
+            "pork belly",
+            "soft boiled eggs",
+            "green onions",
+            "nori",
+            "soy sauce",
+            "mirin",
+            "sake",
+            "chicken stock",
+            "garlic",
+            "ginger"
+        ],
+        "preparationSteps": [
+            "Simmer pork belly in soy sauce, mirin and sake for 2 hours",
+            "Make broth by simmering chicken stock with garlic and ginger",
+            "Cook noodles according to package",
+            "Assemble bowl with noodles, broth, sliced pork, egg halves and garnishes"
+        ],
+        "cookingTime": 150,
+        "origin": "Japan",
+        "spiceLevel": "Mild",
+        "difficulty": "Hard"
+    },
+    {
+        "_id": "67f264da05b9a5d58571bbf7",
+        "name": "Spicy Thai Green Curry",
+        "ingredients": [
+            "chicken breast",
+            "green curry paste",
+            "coconut milk",
+            "bamboo shoots",
+            "thai eggplant",
+            "fish sauce",
+            "palm sugar",
+            "thai basil",
+            "kaffir lime leaves"
+        ],
+        "preparationSteps": [
+            "Heat coconut milk in a wok",
+            "Add green curry paste and stir until fragrant",
+            "Add chicken and cook until no longer pink",
+            "Add remaining ingredients except basil",
+            "Simmer for 15 minutes",
+            "Add basil leaves just before serving"
+        ],
+        "cookingTime": 30,
+        "origin": "Thailand",
+        "spiceLevel": "Hot",
+        "difficulty": "Medium"
+    },
+    {
+        "_id": "67f264da05b9a5d58571bbf8",
+        "name": "Classic French Omelette",
+        "ingredients": [
+            "eggs",
+            "butter",
+            "salt",
+            "pepper",
+            "chives"
+        ],
+        "preparationSteps": [
+            "Beat eggs with salt and pepper",
+            "Heat butter in non-stick pan",
+            "Pour in eggs and stir gently with a fork",
+            "When nearly set, fold omelette in half",
+            "Garnish with chives"
+        ],
+        "cookingTime": 5,
+        "origin": "France",
+        "spiceLevel": "None",
+        "difficulty": "Easy"
+    },
+    {
+        "_id": "67f83103ed2f513829ba4cbb",
+        "name": "Köttbullar",
+        "ingredients": [
+            "ground beef",
+            "breadcrumbs",
+            "milk",
+            "onion",
+            "egg",
+            "salt",
+            "pepper",
+            "allspice",
+            "butter",
+            "flour",
+            "beef broth",
+            "heavy cream"
+        ],
+        "preparationSteps": [
+            "Soak breadcrumbs in milk",
+            "Mix ground beef with soaked breadcrumbs, finely chopped onion, egg, and spices",
+            "Form small meatballs",
+            "Brown meatballs in butter",
+            "Make gravy with remaining butter, flour, beef broth and cream",
+            "Simmer meatballs in gravy for 10-15 minutes"
+        ],
+        "cookingTime": 45,
+        "origin": "Sweden",
+        "spiceLevel": "Mild",
+        "difficulty": "Medium",
+        "__v": 0
+    }
+]

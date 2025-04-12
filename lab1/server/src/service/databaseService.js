@@ -23,15 +23,22 @@ DatabaseService.connect = () => {
 
 // Dish schema definition
 const dishSchema = new Schema({
-    id: Number,
+    _id: {
+        type: String,
+        default: () => new mongoose.Types.ObjectId().toString()
+    },
     name: String,
-    ingredients: [String],  // Lowercase 'i' to match your insert
-    preparationSteps: [String], // Corrected from preparedtonStops
+    ingredients: [String],  
+    preparationSteps: [String], 
     cookingTime: Number,
     origin: String,
     spiceLevel: String,
-    difficulty: String    // For Swedish Meatballs
-})
+    difficulty: String    
+},{
+    versionKey: false
+});
+
+
 
 // Define the schema for the dishes collection
 DatabaseService.dishModel = mongoose.model('dishes', dishSchema);

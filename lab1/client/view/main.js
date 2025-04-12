@@ -1,7 +1,18 @@
-let recipes = []; // Array to hold recipe data
+let recipes = []; // Initialize an empty array to store recipes
 
 
-// Load data from the server
+document.addEventListener('DOMContentLoaded', function() {
+    const addButton = document.createElement('button');
+    addButton.textContent = 'Add New Dish';
+    addButton.id = 'add-new-dish';
+    addButton.classList.add('add-button');
+    document.body.insertBefore(addButton, document.getElementById('recipe-container'));
+    
+    addButton.addEventListener('click', () => {
+        showUpdateForm(null);
+    });
+});
+// Function to load all dishes from the server
 async function loadData() {
     const url = "http://localhost:5000/api/dishes";
     try {
@@ -15,7 +26,8 @@ async function loadData() {
         console.error("Error loading data:", error);
     }
 }
-// Delete recipe function
+
+// Function to delete a recipe
 async function deleteRecipe(recipeId) {
     try {
         const response = await fetch(`http://localhost:5000/api/dishes/${recipeId}`, {
@@ -25,14 +37,14 @@ async function deleteRecipe(recipeId) {
             recipes = recipes.filter(r => r._id !== recipeId);
             renderRecipes(recipes);
         } else {
-            console.log(recipeId);
             console.error('Failed to delete the recipe');
         }
     } catch (error) {
         console.error('Error deleting the recipe:', error);
     }
 }
-// Update recipe function
+
+// Function to update a recipe
 async function updateRecipe(recipeId, updatedRecipe) {
     try {
         const response = await fetch(`http://localhost:5000/api/dishes/${recipeId}`, {
@@ -53,7 +65,30 @@ async function updateRecipe(recipeId, updatedRecipe) {
         throw error;
     }
 }
-// Show the update form
+
+// Function to add a new recipe
+async function addNewRecipe(newRecipe) {
+    try {
+        const response = await fetch('http://localhost:5000/api/dishes', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(newRecipe),
+        });
+        
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        
+        return await response.json();
+    } catch (error) {
+        console.error('Error adding new recipe:', error);
+        throw error;
+    }
+}
+
+// Function to show the update form for adding or updating a recipe
 function showUpdateForm(recipe) {
     const formContainer = document.createElement('div');
     formContainer.classList.add('update-form-container');
@@ -61,7 +96,11 @@ function showUpdateForm(recipe) {
     const form = document.createElement('form');
     form.classList.add('update-form');
     
-    const createEditableField = (label, value, isArray = false) => {
+    const title = document.createElement('h2');
+    title.textContent = recipe ? 'Update Recipe' : 'Add New Recipe';
+    form.appendChild(title);
+    
+    const createEditableField = (label, value = '', isArray = false) => {
         const fieldContainer = document.createElement('div');
         fieldContainer.classList.add('form-field');
         
@@ -71,14 +110,19 @@ function showUpdateForm(recipe) {
         let inputElement;
         if (isArray) {
             inputElement = document.createElement('textarea');
-            inputElement.value = value.join('\n');
+            inputElement.value = Array.isArray(value) ? value.join('\n') : '';
         } else {
             inputElement = document.createElement('input');
             inputElement.type = 'text';
-            inputElement.value = value;
+            inputElement.value = value || '';
         }
         
-        inputElement.disabled = true;
+        if (!recipe) {
+            inputElement.disabled = false;
+        } else {
+            inputElement.disabled = true;
+        }
+        
         inputElement.classList.add('form-input');
         
         const editButton = document.createElement('button');
@@ -92,37 +136,45 @@ function showUpdateForm(recipe) {
         updateButton.classList.add('update-btn');
         updateButton.style.display = 'none';
         
-        editButton.addEventListener('click', () => {
-            inputElement.disabled = false;
-            inputElement.focus();
-            editButton.style.display = 'none';
-            updateButton.style.display = 'inline-block';
-        });
-        
-        updateButton.addEventListener('click', () => {
-            inputElement.disabled = true;
-            updateButton.style.display = 'none';
-            editButton.style.display = 'inline-block';
-        });
+        if (recipe) {
+            editButton.addEventListener('click', () => {
+                inputElement.disabled = false;
+                inputElement.focus();
+                editButton.style.display = 'none';
+                updateButton.style.display = 'inline-block';
+            });
+            
+            updateButton.addEventListener('click', () => {
+                inputElement.disabled = true;
+                updateButton.style.display = 'none';
+                editButton.style.display = 'inline-block';
+            });
+        }
         
         fieldContainer.appendChild(labelElement);
         fieldContainer.appendChild(inputElement);
-        fieldContainer.appendChild(editButton);
-        fieldContainer.appendChild(updateButton);
+        
+        if (recipe) {
+            const buttonContainer = document.createElement('div');
+            buttonContainer.classList.add('button-container');
+            buttonContainer.appendChild(editButton);
+            buttonContainer.appendChild(updateButton);
+            fieldContainer.appendChild(buttonContainer);
+        }
         
         return fieldContainer;
     };
     
-    form.appendChild(createEditableField('Name:', recipe.name));
-    form.appendChild(createEditableField('Ingredients:', recipe.ingredients, true));
-    form.appendChild(createEditableField('Preparation Steps:', recipe.preparationSteps, true));
-    form.appendChild(createEditableField('Cooking Time (minutes):', recipe.cookingTime));
-    form.appendChild(createEditableField('Origin:', recipe.origin));
-    form.appendChild(createEditableField('Spice Level:', recipe.spiceLevel));
-    form.appendChild(createEditableField('Difficulty:', recipe.difficulty));
+    form.appendChild(createEditableField('Name:', recipe?.name));
+    form.appendChild(createEditableField('Ingredients:', recipe?.ingredients, true));
+    form.appendChild(createEditableField('Preparation Steps:', recipe?.preparationSteps, true));
+    form.appendChild(createEditableField('Cooking Time (minutes):', recipe?.cookingTime));
+    form.appendChild(createEditableField('Origin:', recipe?.origin));
+    form.appendChild(createEditableField('Spice Level:', recipe?.spiceLevel));
+    form.appendChild(createEditableField('Difficulty:', recipe?.difficulty));
     
     const saveButton = document.createElement('button');
-    saveButton.textContent = 'Save Changes';
+    saveButton.textContent = recipe ? 'Save Changes' : 'Add Dish';
     saveButton.type = 'button';
     saveButton.classList.add('save-btn');
     
@@ -130,8 +182,8 @@ function showUpdateForm(recipe) {
         const inputs = form.querySelectorAll('.form-input');
         const updatedRecipe = {
             name: inputs[0].value,
-            ingredients: inputs[1].value.split('\n'),
-            preparationSteps: inputs[2].value.split('\n'),
+            ingredients: inputs[1].value.split('\n').filter(item => item.trim() !== ''),
+            preparationSteps: inputs[2].value.split('\n').filter(item => item.trim() !== ''),
             cookingTime: inputs[3].value,
             origin: inputs[4].value,
             spiceLevel: inputs[5].value,
@@ -139,13 +191,17 @@ function showUpdateForm(recipe) {
         };
         
         try {
-            await updateRecipe(recipe._id, updatedRecipe);
+            if (recipe) {
+                await updateRecipe(recipe._id, updatedRecipe);
+            } else {
+                await addNewRecipe(updatedRecipe);
+            }
             formContainer.remove();
             document.querySelector('.overlay').remove();
             await loadData();
             renderRecipes(recipes);
         } catch (error) {
-            console.error('Error updating recipe:', error);
+            console.error('Error saving recipe:', error);
         }
     });
     
@@ -175,7 +231,8 @@ function showUpdateForm(recipe) {
     document.body.appendChild(overlay);
     document.body.appendChild(formContainer);
 }
-// Function to render recipes
+
+// Function to render recipes on the page
 function renderRecipes(recipes) {
     const recipesContainer = document.getElementById("recipe-container");
     recipesContainer.innerHTML = "";
@@ -253,7 +310,7 @@ function renderRecipes(recipes) {
     }
 }
 
-// Initial load of data and rendering recipes
+// Load data and render recipes on page load
 loadData().then(() => {
     renderRecipes(recipes);
 }).catch(error => {
