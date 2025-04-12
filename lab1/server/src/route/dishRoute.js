@@ -1,6 +1,7 @@
 import express from 'express';
 import { controller } from '../controller/dishController.js';
 
+// initialize express router
 export const router = express.Router();
 
 // CREATE - Add new recipe
