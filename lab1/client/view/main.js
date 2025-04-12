@@ -1,5 +1,7 @@
-let recipes = [];
+let recipes = []; // Array to hold recipe data
 
+
+// Load data from the server
 async function loadData() {
     const url = "http://localhost:5000/api/dishes";
     try {
@@ -13,7 +15,7 @@ async function loadData() {
         console.error("Error loading data:", error);
     }
 }
-
+// Delete recipe function
 async function deleteRecipe(recipeId) {
     try {
         const response = await fetch(`http://localhost:5000/api/dishes/${recipeId}`, {
@@ -30,7 +32,7 @@ async function deleteRecipe(recipeId) {
         console.error('Error deleting the recipe:', error);
     }
 }
-
+// Update recipe function
 async function updateRecipe(recipeId, updatedRecipe) {
     try {
         const response = await fetch(`http://localhost:5000/api/dishes/${recipeId}`, {
@@ -51,7 +53,7 @@ async function updateRecipe(recipeId, updatedRecipe) {
         throw error;
     }
 }
-
+// Show the update form
 function showUpdateForm(recipe) {
     const formContainer = document.createElement('div');
     formContainer.classList.add('update-form-container');
@@ -173,7 +175,7 @@ function showUpdateForm(recipe) {
     document.body.appendChild(overlay);
     document.body.appendChild(formContainer);
 }
-
+// Function to render recipes
 function renderRecipes(recipes) {
     const recipesContainer = document.getElementById("recipe-container");
     recipesContainer.innerHTML = "";
@@ -251,7 +253,7 @@ function renderRecipes(recipes) {
     }
 }
 
-
+// Initial load of data and rendering recipes
 loadData().then(() => {
     renderRecipes(recipes);
 }).catch(error => {
