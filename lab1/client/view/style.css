@@ -15,9 +15,9 @@ h1 {
 
 
 #recipe-container {
-    display: flex;
-    flex-direction: column;
-    flex-wrap: wrap;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: auto;
     justify-content: center;
     gap: 20px;
     padding: 20px;
