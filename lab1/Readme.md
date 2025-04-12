@@ -33,5 +33,5 @@ A web application for managing and organizing your favorite recipes. This system
 
 2. **Clone the repository**:
    ```bash
-   git clone https://github.com/yourusername/recipe-management.git
+   git clone https://github.com/ryadhazin0002/Fullstack-course.git
    cd recipe-management
