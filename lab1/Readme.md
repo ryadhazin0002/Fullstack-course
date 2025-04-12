@@ -34,4 +34,14 @@ A web application for managing and organizing your favorite recipes. This system
 2. **Clone the repository**:
    ```bash
    git clone https://github.com/ryadhazin0002/Fullstack-course.git
-   cd recipe-management
+   cd Fullstack-course/lab1/server
+
+3. **Install dependencies:**
+  ```bash
+    npm install
+
+4 **Start the server**
+```bash
+  npm start
+
+  
