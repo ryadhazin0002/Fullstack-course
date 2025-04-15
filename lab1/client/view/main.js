@@ -1,6 +1,5 @@
 let recipes = []; // Initialize an empty array to store recipes
 
-
 document.addEventListener('DOMContentLoaded', function() {
     const addButton = document.createElement('button');
     addButton.textContent = 'Add New Dish';
@@ -9,9 +8,12 @@ document.addEventListener('DOMContentLoaded', function() {
     document.body.insertBefore(addButton, document.getElementById('recipe-container'));
     
     addButton.addEventListener('click', () => {
-        showUpdateForm(null);
+        showAddForm();
     });
+    
+    loadData();
 });
+
 // Function to load all dishes from the server
 async function loadData() {
     const url = "http://localhost:5000/api/dishes";
@@ -27,12 +29,11 @@ async function loadData() {
         }
         const data = await response.json();
         recipes = data;
+        renderRecipes(recipes);
     } catch (error) {
         console.error("Error loading data:", error);
     }
 }
-
-
 
 // Function to delete a recipe
 async function deleteRecipe(recipeId) {
@@ -66,7 +67,8 @@ async function updateRecipe(recipeId, updatedRecipe) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
         
-        return await response.json();
+        const data = await response.json();
+        return data;
     } catch (error) {
         console.error('Error updating recipe:', error);
         throw error;
@@ -88,15 +90,16 @@ async function addNewRecipe(newRecipe) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
         
-        return await response.json();
+        const data = await response.json();
+        return data;
     } catch (error) {
         console.error('Error adding new recipe:', error);
         throw error;
     }
 }
 
-// Function to show the update form for adding or updating a recipe
-function showUpdateForm(recipe) {
+// Function to show the add form
+function showAddForm() {
     const formContainer = document.createElement('div');
     formContainer.classList.add('update-form-container');
     
@@ -104,109 +107,65 @@ function showUpdateForm(recipe) {
     form.classList.add('update-form');
     
     const title = document.createElement('h2');
-    title.textContent = recipe ? 'Update Recipe' : 'Add New Recipe';
+    title.textContent = 'Add New Recipe';
     form.appendChild(title);
     
-    const createEditableField = (label, value = '', isArray = false) => {
+    const fields = [
+        { name: 'name', label: 'Name', type: 'text' },
+        { name: 'ingredients', label: 'Ingredients (one per line)', type: 'textarea' },
+        { name: 'preparationSteps', label: 'Preparation Steps (one per line)', type: 'textarea' },
+        { name: 'cookingTime', label: 'Cooking Time (minutes)', type: 'number' },
+        { name: 'origin', label: 'Origin', type: 'text' },
+        { name: 'spiceLevel', label: 'Spice Level', type: 'text' },
+        { name: 'difficulty', label: 'Difficulty', type: 'text' }
+    ];
+    
+    fields.forEach(field => {
         const fieldContainer = document.createElement('div');
         fieldContainer.classList.add('form-field');
         
         const labelElement = document.createElement('label');
-        labelElement.textContent = label;
+        labelElement.textContent = field.label;
         
         let inputElement;
-        if (isArray) {
+        if (field.type === 'textarea') {
             inputElement = document.createElement('textarea');
-            inputElement.value = Array.isArray(value) ? value.join('\n') : '';
+            inputElement.rows = 3;
         } else {
             inputElement = document.createElement('input');
-            inputElement.type = 'text';
-            inputElement.value = value || '';
+            inputElement.type = field.type;
         }
         
-        if (!recipe) {
-            inputElement.disabled = false;
-        } else {
-            inputElement.disabled = true;
-        }
-        
+        inputElement.name = field.name;
         inputElement.classList.add('form-input');
-        
-        const editButton = document.createElement('button');
-        editButton.textContent = 'Edit';
-        editButton.type = 'button';
-        editButton.classList.add('edit-btn');
-        
-        const updateButton = document.createElement('button');
-        updateButton.textContent = 'Update';
-        updateButton.type = 'button';
-        updateButton.classList.add('update-btn');
-        updateButton.style.display = 'none';
-        
-        if (recipe) {
-            editButton.addEventListener('click', () => {
-                inputElement.disabled = false;
-                inputElement.focus();
-                editButton.style.display = 'none';
-                updateButton.style.display = 'inline-block';
-            });
-            
-            updateButton.addEventListener('click', () => {
-                inputElement.disabled = true;
-                updateButton.style.display = 'none';
-                editButton.style.display = 'inline-block';
-            });
-        }
         
         fieldContainer.appendChild(labelElement);
         fieldContainer.appendChild(inputElement);
-        
-        if (recipe) {
-            const buttonContainer = document.createElement('div');
-            buttonContainer.classList.add('button-container');
-            buttonContainer.appendChild(editButton);
-            buttonContainer.appendChild(updateButton);
-            fieldContainer.appendChild(buttonContainer);
-        }
-        
-        return fieldContainer;
-    };
-    
-    form.appendChild(createEditableField('Name:', recipe?.name));
-    form.appendChild(createEditableField('Ingredients:', recipe?.ingredients, true));
-    form.appendChild(createEditableField('Preparation Steps:', recipe?.preparationSteps, true));
-    form.appendChild(createEditableField('Cooking Time (minutes):', recipe?.cookingTime));
-    form.appendChild(createEditableField('Origin:', recipe?.origin));
-    form.appendChild(createEditableField('Spice Level:', recipe?.spiceLevel));
-    form.appendChild(createEditableField('Difficulty:', recipe?.difficulty));
+        form.appendChild(fieldContainer);
+    });
     
     const saveButton = document.createElement('button');
-    saveButton.textContent = recipe ? 'Save Changes' : 'Add Dish';
+    saveButton.textContent = 'Add Dish';
     saveButton.type = 'button';
     saveButton.classList.add('save-btn');
     
     saveButton.addEventListener('click', async () => {
-        const inputs = form.querySelectorAll('.form-input');
-        const updatedRecipe = {
-            name: inputs[0].value,
-            ingredients: inputs[1].value.split('\n').filter(item => item.trim() !== ''),
-            preparationSteps: inputs[2].value.split('\n').filter(item => item.trim() !== ''),
-            cookingTime: inputs[3].value,
-            origin: inputs[4].value,
-            spiceLevel: inputs[5].value,
-            difficulty: inputs[6].value
+        const formData = new FormData(form);
+        const newRecipe = {
+            name: formData.get('name'),
+            ingredients: formData.get('ingredients').split('\n').filter(item => item.trim() !== ''),
+            preparationSteps: formData.get('preparationSteps').split('\n').filter(item => item.trim() !== ''),
+            cookingTime: formData.get('cookingTime'),
+            origin: formData.get('origin'),
+            spiceLevel: formData.get('spiceLevel'),
+            difficulty: formData.get('difficulty')
         };
         
         try {
-            if (recipe) {
-                await updateRecipe(recipe._id, updatedRecipe);
-            } else {
-                await addNewRecipe(updatedRecipe);
-            }
+            await addNewRecipe(newRecipe);
             formContainer.remove();
             document.querySelector('.overlay').remove();
             await loadData();
-            renderRecipes(recipes);
         } catch (error) {
             console.error('Error saving recipe:', error);
         }
@@ -239,77 +198,126 @@ function showUpdateForm(recipe) {
     document.body.appendChild(formContainer);
 }
 
-// Function to render recipes on the page
+// Function to render recipes on the page in a table format with inline editing
 function renderRecipes(recipes) {
     const recipesContainer = document.getElementById("recipe-container");
     recipesContainer.innerHTML = "";
     
     if (recipes && recipes.length > 0) {
+        const table = document.createElement('table');
+        table.classList.add('dishes-table');
+        
+        // Create table header
+        const thead = document.createElement('thead');
+        const headerRow = document.createElement('tr');
+        
+        const headers = ['Name', 'Ingredients', 'Preparation Steps', 'Cooking Time', 'Origin', 'Spice Level', 'Difficulty', 'Actions'];
+        headers.forEach(headerText => {
+            const th = document.createElement('th');
+            th.textContent = headerText;
+            headerRow.appendChild(th);
+        });
+        
+        thead.appendChild(headerRow);
+        table.appendChild(thead);
+        
+        // Create table body
+        const tbody = document.createElement('tbody');
+        
         recipes.forEach(recipe => {
-            const recipeDiv = document.createElement('div');
-            recipeDiv.classList.add('recipe-card');
+            const row = document.createElement('tr');
+            row.dataset.id = recipe._id;
             
-            const nameHeading = document.createElement('h2');
-            nameHeading.textContent = recipe.name;
+            // Create cells for each property
+            const nameCell = createEditableCell(recipe.name, 'name');
+            const ingredientsCell = createEditableCell(recipe.ingredients.join(', '), 'ingredients', true);
+            const stepsCell = createEditableCell("- " + recipe.preparationSteps.join('\n- '), 'preparationSteps', true);
+            const timeCell = createEditableCell(recipe.cookingTime, 'cookingTime');
+            const originCell = createEditableCell(recipe.origin, 'origin');
+            const spiceCell = createEditableCell(recipe.spiceLevel, 'spiceLevel');
+            const difficultyCell = createEditableCell(recipe.difficulty, 'difficulty');
             
-            const ingredientsList = document.createElement('ul');
-            const ingredientsHeading = document.createElement('h3');
-            ingredientsHeading.textContent = 'Ingredients:';
-            recipe.ingredients.forEach(ingredient => {
-                const listItem = document.createElement('li');
-                listItem.textContent = ingredient;
-                ingredientsList.appendChild(listItem);
-            });
+            // Actions cell with buttons
+            const actionsCell = document.createElement('td');
+            actionsCell.classList.add('actions-cell');
             
-            const preparationStepsList = document.createElement('ol');
-            const preparationHeading = document.createElement('h3');
-            preparationHeading.textContent = 'Preparation Steps:';
-            recipe.preparationSteps.forEach(step => {
-                const listItem = document.createElement('li');
-                listItem.textContent = step;
-                preparationStepsList.appendChild(listItem);
-            });
+            const saveButton = document.createElement('button');
+            saveButton.textContent = 'Save';
+            saveButton.classList.add('save-button');
+            saveButton.style.display = 'none';
             
-            const cookingTimeParagraph = document.createElement('p');
-            cookingTimeParagraph.textContent = `Cooking Time: ${recipe.cookingTime} minutes`;
+            const cancelButton = document.createElement('button');
+            cancelButton.textContent = 'Cancel';
+            cancelButton.classList.add('cancel-button');
+            cancelButton.style.display = 'none';
             
-            const originParagraph = document.createElement('p');
-            originParagraph.textContent = `Origin: ${recipe.origin}`;
-            
-            const spiceLevelParagraph = document.createElement('p');
-            spiceLevelParagraph.textContent = `Spice Level: ${recipe.spiceLevel}`;
-            
-            const difficultyParagraph = document.createElement('p');
-            difficultyParagraph.textContent = `Difficulty: ${recipe.difficulty}`;
+            const editButton = document.createElement('button');
+            editButton.textContent = 'Edit';
+            editButton.classList.add('edit-button');
             
             const deleteButton = document.createElement('button');
             deleteButton.textContent = 'Delete';
             deleteButton.classList.add('delete-button');
+            
+            // Add event listeners
+            editButton.addEventListener('click', () => {
+                enableRowEditing(row);
+                editButton.style.display = 'none';
+                deleteButton.style.display = 'none';
+                saveButton.style.display = 'inline-block';
+                cancelButton.style.display = 'inline-block';
+            });
+            
+            cancelButton.addEventListener('click', () => {
+                disableRowEditing(row);
+                editButton.style.display = 'inline-block';
+                deleteButton.style.display = 'inline-block';
+                saveButton.style.display = 'none';
+                cancelButton.style.display = 'none';
+            });
+            
+            saveButton.addEventListener('click', async () => {
+                const updatedRecipe = getUpdatedRecipeFromRow(row);
+                try {
+                    await updateRecipe(recipe._id, updatedRecipe);
+                    disableRowEditing(row);
+                    editButton.style.display = 'inline-block';
+                    deleteButton.style.display = 'inline-block';
+                    saveButton.style.display = 'none';
+                    cancelButton.style.display = 'none';
+                    // Update the display values
+                    updateDisplayValues(row, updatedRecipe);
+                } catch (error) {
+                    console.error('Error updating recipe:', error);
+                }
+            });
+            
             deleteButton.addEventListener('click', async () => {
-                deleteRecipe(recipe._id);
+                if (confirm('Are you sure you want to delete this recipe?')) {
+                    await deleteRecipe(recipe._id);
+                }
             });
             
-            const updateButton = document.createElement('button');
-            updateButton.textContent = 'Update';
-            updateButton.classList.add('update-button');
-            updateButton.addEventListener('click', () => {
-                showUpdateForm(recipe);
-            });
+            actionsCell.appendChild(editButton);
+            actionsCell.appendChild(saveButton);
+            actionsCell.appendChild(cancelButton);
+            actionsCell.appendChild(deleteButton);
             
-            recipeDiv.appendChild(nameHeading);
-            recipeDiv.appendChild(ingredientsHeading);
-            recipeDiv.appendChild(ingredientsList);
-            recipeDiv.appendChild(preparationHeading);
-            recipeDiv.appendChild(preparationStepsList);
-            recipeDiv.appendChild(cookingTimeParagraph);
-            recipeDiv.appendChild(originParagraph);
-            recipeDiv.appendChild(spiceLevelParagraph);
-            recipeDiv.appendChild(difficultyParagraph);
-            recipeDiv.appendChild(updateButton);
-            recipeDiv.appendChild(deleteButton);
+            // Append all cells to the row
+            row.appendChild(nameCell);
+            row.appendChild(ingredientsCell);
+            row.appendChild(stepsCell);
+            row.appendChild(timeCell);
+            row.appendChild(originCell);
+            row.appendChild(spiceCell);
+            row.appendChild(difficultyCell);
+            row.appendChild(actionsCell);
             
-            recipesContainer.appendChild(recipeDiv);
+            tbody.appendChild(row);
         });
+        
+        table.appendChild(tbody);
+        recipesContainer.appendChild(table);
     } else {
         const noRecipesMessage = document.createElement('p');
         noRecipesMessage.textContent = 'No recipes available.';
@@ -317,9 +325,79 @@ function renderRecipes(recipes) {
     }
 }
 
-// Load data and render recipes on page load
-loadData().then(() => {
-    renderRecipes(recipes);
-}).catch(error => {
-    console.error("Error loading data:", error);
-});
+// Helper function to create editable cells
+function createEditableCell(value, fieldName, isTextarea = false) {
+    const cell = document.createElement('td');
+    cell.dataset.field = fieldName;
+    
+    const displayDiv = document.createElement('div');
+    displayDiv.classList.add('display-value');
+    displayDiv.textContent = value;
+    
+    let inputElement;
+    if (isTextarea) {
+        inputElement = document.createElement('textarea');
+        inputElement.value = value;
+        inputElement.rows = 3;
+    } else {
+        inputElement = document.createElement('input');
+        inputElement.type = 'text';
+        inputElement.value = value;
+    }
+    
+    inputElement.classList.add('edit-input');
+    inputElement.style.display = 'none';
+    
+    cell.appendChild(displayDiv);
+    cell.appendChild(inputElement);
+    
+    return cell;
+}
+
+// Enable editing for a row
+function enableRowEditing(row) {
+    const cells = row.querySelectorAll('td:not(.actions-cell)');
+    cells.forEach(cell => {
+        const display = cell.querySelector('.display-value');
+        const input = cell.querySelector('.edit-input');
+        
+        display.style.display = 'none';
+        input.style.display = 'block';
+    });
+}
+
+// Disable editing for a row
+function disableRowEditing(row) {
+    const cells = row.querySelectorAll('td:not(.actions-cell)');
+    cells.forEach(cell => {
+        const display = cell.querySelector('.display-value');
+        const input = cell.querySelector('.edit-input');
+        
+        display.style.display = 'block';
+        input.style.display = 'none';
+    });
+}
+
+// Get updated recipe data from a row
+function getUpdatedRecipeFromRow(row) {
+    return {
+        name: row.querySelector('[data-field="name"] .edit-input').value,
+        ingredients: row.querySelector('[data-field="ingredients"] .edit-input').value.split('\n').filter(item => item.trim() !== ''),
+        preparationSteps: row.querySelector('[data-field="preparationSteps"] .edit-input').value.split('\n').filter(item => item.trim() !== ''),
+        cookingTime: row.querySelector('[data-field="cookingTime"] .edit-input').value,
+        origin: row.querySelector('[data-field="origin"] .edit-input').value,
+        spiceLevel: row.querySelector('[data-field="spiceLevel"] .edit-input').value,
+        difficulty: row.querySelector('[data-field="difficulty"] .edit-input').value
+    };
+}
+
+// Update display values after editing
+function updateDisplayValues(row, updatedRecipe) {
+    row.querySelector('[data-field="name"] .display-value').textContent = updatedRecipe.name;
+    row.querySelector('[data-field="ingredients"] .display-value').textContent = updatedRecipe.ingredients.join('\n');
+    row.querySelector('[data-field="preparationSteps"] .display-value').textContent = updatedRecipe.preparationSteps.join('\n');
+    row.querySelector('[data-field="cookingTime"] .display-value').textContent = updatedRecipe.cookingTime;
+    row.querySelector('[data-field="origin"] .display-value').textContent = updatedRecipe.origin;
+    row.querySelector('[data-field="spiceLevel"] .display-value').textContent = updatedRecipe.spiceLevel;
+    row.querySelector('[data-field="difficulty"] .display-value').textContent = updatedRecipe.difficulty;
+}

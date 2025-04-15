@@ -5,6 +5,7 @@ body {
     padding: 0;
     background-color: #0d1117;
     color: #c9d1d9;
+    line-height: 1.6;
 }
 
 /* Main heading style */
@@ -14,86 +15,154 @@ h1 {
     color: #f0f6fc;
 }
 
-/* Grid container for recipe cards */
+/* Table container styling */
 #recipe-container {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    grid-template-rows: auto;
-    justify-content: center;
-    gap: 20px;
     padding: 20px;
+    max-width: 95%;
+    margin: 0 auto;
+    overflow-x: auto;
 }
 
-/* Individual recipe card styling */
-.recipe-card {
-    position: relative;
+/* Table styling */
+.dishes-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
     background-color: #161b22;
-    border: 1px solid #30363d; 
-    border-radius: 8px;
+    border: 1px solid #30363d;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-    width: 90%;
-    padding: 15px;
-    text-align: left;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
-/* Hover effect for recipe cards */
-.recipe-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+/* Table header styling */
+.dishes-table th {
+    background-color: #1f2937;
+    color: #f0f6fc;
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 2px solid #30363d;
+    position: sticky;
+    top: 0;
+    font-weight: bold;
+}
+
+/* Table cell styling */
+.dishes-table td {
+    padding: 12px 15px;
+    border-bottom: 1px solid #30363d;
+    vertical-align: top;
+    color: #c9d1d9;
+}
+
+/* Table row hover effect */
+.dishes-table tbody tr:hover {
     background-color: #1f2937;
 }
 
-/* Recipe title style */
-.recipe-card h2 {
-    font-size: 1.5em;
-    margin: 10px 0;
+/* Alternate row coloring */
+.dishes-table tbody tr:nth-child(even) {
+    background-color: #1a2129;
+}
+
+/* Inline editing styles */
+.display-value {
+    white-space: pre-wrap;
+    word-break: break-word;
+    min-height: 20px;
+}
+
+.edit-input {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #30363d;
+    border-radius: 4px;
+    background-color: #0d1117;
+    color: #c9d1d9;
+    font-family: inherit;
+    box-sizing: border-box;
+}
+
+.edit-input:focus {
+    outline: none;
+    border-color: #1f6feb;
+    box-shadow: 0 0 0 3px rgba(31, 111, 235, 0.3);
+}
+
+textarea.edit-input {
+    min-height: 60px;
+    resize: vertical;
+}
+
+/* Button styles */
+.edit-button {
+    background-color: #1f6feb;
     color: #f0f6fc;
 }
 
-/* Recipe description text */
-.recipe-card p {
-    font-size: 1em;
-    color: #8b949e; 
-    margin: 10px 0;
+.save-button {
+    background-color: #238636;
+    color: #f0f6fc;
 }
 
-/* Delete button styling */
-.recipe-card .delete-button {
-    position: absolute;
-    bottom: 10px;
-    right: 10px;
-    padding: 5px 10px;
+.cancel-button {
     background-color: #da3633;
     color: #f0f6fc;
+}
+
+.delete-button {
+    background-color: #f85149;
+    color: #f0f6fc;
+}
+
+.edit-button, 
+.save-button, 
+.cancel-button, 
+.delete-button {
+    padding: 6px 12px;
+    margin-right: 8px;
     border: none;
-    border-radius: 5px;
+    border-radius: 4px;
     cursor: pointer;
+    font-size: 14px;
     transition: background-color 0.2s ease;
 }
 
-/* Delete button hover effect */
-.recipe-card .delete-button:hover {
+.edit-button:hover {
+    background-color: #388bfd;
+}
+
+.save-button:hover {
+    background-color: #2ea043;
+}
+
+.cancel-button:hover {
     background-color: #f85149;
 }
 
-/* Update button styling */
-.recipe-card .update-button {
-    position: absolute;
-    bottom: 10px;
-    right: 100px;
-    padding: 5px 10px;
-    background-color: #1f6feb; 
-    color: #f0f6fc;
+.delete-button:hover {
+    background-color: #ff6b6b;
+}
+
+/* Actions cell styling */
+.actions-cell {
+    white-space: nowrap;
+}
+
+/* Add button styling */
+.add-button {
+    display: block;
+    margin: 20px auto;
+    padding: 10px 20px;
+    background-color: #238636;
+    color: white;
     border: none;
-    border-radius: 5px;
+    border-radius: 4px;
     cursor: pointer;
+    font-size: 16px;
     transition: background-color 0.2s ease;
 }
 
-/* Update button hover effect */
-.recipe-card .update-button:hover {
-    background-color: #388bfd; 
+.add-button:hover {
+    background-color: #2ea043;
 }
 
 /* Update form modal container */
@@ -103,7 +172,7 @@ h1 {
     left: 50%;
     transform: translate(-50%, -50%);
     background: #161b22;
-    padding: 20px;
+    padding: 25px;
     border-radius: 8px;
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.4);
     z-index: 1001;
@@ -153,6 +222,7 @@ h1 {
     width: 100%;
     background-color: #0d1117;
     color: #c9d1d9;
+    font-family: inherit;
 }
 
 /* Input focus state */
@@ -162,37 +232,10 @@ h1 {
     box-shadow: 0 0 0 3px rgba(31, 111, 235, 0.3);
 }
 
-/* Disabled input styling */
-.form-input:disabled {
-    background-color: #161b22;
-    color: #484f58;
-}
-
 /* Textarea specific styling */
 textarea.form-input {
     min-height: 100px;
     resize: vertical;
-}
-
-/* Button styles for edit/update actions */
-.edit-btn, .update-btn {
-    padding: 5px 10px;
-    margin-top: 5px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-}
-
-/* Edit button color */
-.edit-btn {
-    background-color: #1f6feb;
-    color: white;
-}
-
-/* Update button color */
-.update-btn {
-    background-color: #238636;
-    color: white;
 }
 
 /* Save button styling */
@@ -205,6 +248,7 @@ textarea.form-input {
     cursor: pointer;
     font-weight: bold;
     margin-top: 10px;
+    transition: background-color 0.2s ease;
 }
 
 /* Cancel button styling */
@@ -217,10 +261,11 @@ textarea.form-input {
     cursor: pointer;
     font-weight: bold;
     margin-top: 5px;
+    transition: background-color 0.2s ease;
 }
 
 /* Button hover effects */
-.edit-btn:hover, .update-btn:hover, .save-btn:hover, .cancel-btn:hover {
+.save-btn:hover, .cancel-btn:hover {
     opacity: 0.9;
 }
 
@@ -278,17 +323,35 @@ footer a:hover {
     text-decoration: underline;
 }
 
-.add-button {
-    margin: 20px;
-    padding: 10px 20px;
-    background-color: #4CAF50;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 16px;
-}
-
-.add-button:hover {
-    background-color: #45a049;
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .dishes-table {
+        display: block;
+        overflow-x: auto;
+    }
+    
+    .dishes-table th, 
+    .dishes-table td {
+        padding: 8px 10px;
+        font-size: 14px;
+    }
+    
+    .edit-button, 
+    .save-button, 
+    .cancel-button, 
+    .delete-button {
+        padding: 4px 8px;
+        font-size: 12px;
+        margin-right: 4px;
+    }
+    
+    .update-form-container {
+        width: 95%;
+        padding: 15px;
+    }
+    
+    .add-button {
+        padding: 8px 16px;
+        font-size: 14px;
+    }
 }
