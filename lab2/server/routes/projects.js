@@ -1,9 +1,9 @@
 import express from 'express';
-import Project from '../models/Project.js';
+import Project from '../model/Project.js';
 
 const router = express.Router();
 
-router.get('/', async (req, res) => {
+router.post('/', async (req, res) => {
     try{
         const existing = await Project.findOne({project_code: req.query.project_code});
         if(existing){
@@ -19,4 +19,4 @@ router.get('/', async (req, res) => {
 }
 );
 
-module.exports = router;
+export default router;

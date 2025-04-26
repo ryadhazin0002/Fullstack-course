@@ -1,26 +1,60 @@
 import express from 'express';
 import cors from 'cors';
 import logger from 'morgan';
-
+import { seedDatabase } from './seed.js';
+import employeeRoutes from './routes/employees.js';
+import projectRoutes from './routes/projects.js';
+import projectAssignmentRoutes from './routes/projectAssignments.js';
 
 const app = express();
 
-app.use(logger("dev"));
-
-const PORT = process.env.PORT;
-
-app.use(cors());
+// Middleware
+app.use(logger('dev'));
+app.use(cors({
+  origin: 'http://localhost:5173',
+  credentials: true, // Allow credentials
+}));
 app.use(express.json());
 
+const PORT = process.env.PORT || 5000;
+
+// Database connection and seeding
+const initializeDatabase = async () => {
+  try {
+    await seedDatabase(); // Now using the exported function directly
+    console.log('Database seeding completed');
+  } catch (error) {
+    console.error('Database initialization failed:', error);
+    process.exit(1);
+  }
+};
+
+// Routes
+app.use('/api/employees', employeeRoutes);
+app.use('/api/projects', projectRoutes);
+app.use('/api/project-assignments', projectAssignmentRoutes);
+
+// Health check endpoints
 app.get('/', (req, res) => {
   res.send('Server is running');
 });
 
-app.get('/api/message', (req, res) => {
-    res.json({ message: 'Hello from the backend' });
-    });
+app.get('/api/health', (req, res) => {
+  res.json({ 
+    status: 'healthy',
+    timestamp: new Date().toISOString(),
+    database: mongoose.connection.readyState === 1 ? 'connected' : 'disconnected'
+  });
+});
 
+// Error handling middleware
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).json({ error: 'Something went wrong!' });
+});
 
-app.listen(PORT, () => {
+// Start server
+app.listen(PORT, async () => {
   console.log(`Server is running on port ${PORT}...`);
+  await initializeDatabase();
 });
