@@ -38,7 +38,7 @@ function AssignmentTable() {
                     ? valA > valB ? 1 : -1 
                     : valA < valB ? 1 : -1;
                     });
-            setData(sortedData.slice(0, 5));
+            setData(sortedData.slice(0, 6));
             setError(null);
         } catch (err) {
             setError(err.message);
@@ -49,7 +49,7 @@ function AssignmentTable() {
 
     useEffect(() => {
         fetchData();
-        const interval = setInterval(fetchData, 60000); // Refresh every minute
+        const interval = setInterval(fetchData, 6000); // Refresh every minute
         return () => clearInterval(interval);
     }, [fetchData, sortField, sortOrder]);
 

@@ -18,7 +18,8 @@ export const seedDatabase = async () => {
             'mustafa123',
             'daniel123',
             'sergej123',
-            'patric123'
+            'patric123',
+            'tony123'
         ];
         
         const hashedPasswords = await Promise.all(
@@ -30,7 +31,8 @@ export const seedDatabase = async () => {
             { employee_id: 'E002', full_name: 'Mustafa hkr', email: 'mustafa@hkr.se', hashed_password: hashedPasswords[1] },
             { employee_id: 'E003', full_name: 'Daniel hkr', email: 'daniel@hkr.se', hashed_password: hashedPasswords[2] },
             { employee_id: 'E004', full_name: 'Sergej hkr', email: 'sergej@hkr.se', hashed_password: hashedPasswords[3] },
-            { employee_id: 'E005', full_name: 'Patric hkr', email: 'patric@hkr.se', hashed_password: hashedPasswords[4] }
+            { employee_id: 'E005', full_name: 'Patric hkr', email: 'patric@hkr.se', hashed_password: hashedPasswords[4] },
+            { employee_id: 'E006', full_name: 'Tony hkr', email: 'tony@hkr.se', hashed_password: hashedPasswords[4] }
         ]);
 
         const projects = await Project.insertMany([
@@ -38,7 +40,8 @@ export const seedDatabase = async () => {
             { project_code: 'P002', project_name: 'Project B', project_description: 'Description for Project B' },
             { project_code: 'P003', project_name: 'Project C', project_description: 'Description for Project C' },
             { project_code: 'P004', project_name: 'Project D', project_description: 'Description for Project D' },
-            { project_code: 'P005', project_name: 'Project E', project_description: 'Description for Project E' }
+            { project_code: 'P005', project_name: 'Project E', project_description: 'Description for Project E' },
+            { project_code: 'P006', project_name: 'Project F', project_description: 'Description for Project F' }
         ]);
 
         await ProjectAssignment.insertMany([
@@ -46,7 +49,8 @@ export const seedDatabase = async () => {
             { employee: employees[1]._id, project: projects[1]._id, start_date: new Date('2023-02-01') },
             { employee: employees[2]._id, project: projects[2]._id, start_date: new Date('2023-03-01') },
             { employee: employees[3]._id, project: projects[3]._id, start_date: new Date('2023-04-01') },
-            { employee: employees[4]._id, project: projects[4]._id, start_date: new Date('2023-05-01') }
+            { employee: employees[4]._id, project: projects[4]._id, start_date: new Date('2023-05-01') },
+         // { employee: employees[5]._id, project: projects[5]._id, start_date: new Date('2023-06-01') }
         ]);
 
         console.log('Database seeded successfully');
