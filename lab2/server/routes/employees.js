@@ -1,7 +1,10 @@
 import express from 'express';
 import employee from '../model/Employee.js';
+
+// Define the routes for the employee collection
 const router = express.Router();
 
+// POST /api/employees
 router.post('/', async (req, res) => {
     try {
         const existing = await employee.findOne({ employee_id: req.body.employee_id });
@@ -16,5 +19,5 @@ router.post('/', async (req, res) => {
     }
 });
 
-
+// export employee router
 export default router;
