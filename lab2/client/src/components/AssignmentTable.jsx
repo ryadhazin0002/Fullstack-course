@@ -38,7 +38,7 @@ function AssignmentTable() {
                     ? valA > valB ? 1 : -1 
                     : valA < valB ? 1 : -1;
                     });
-            setData(sortedData.slice(0, 6));
+            setData(sortedData.slice(0, 5));
             setError(null);
         } catch (err) {
             setError(err.message);
