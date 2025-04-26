@@ -1,8 +1,10 @@
 import express from 'express';
 import ProjectAssignment from '../model/ProjectAssignment.js';
 
+// Define the routes for the projectAssignment collection
 const router = express.Router();
 
+// POST /api/project-assignments
 router.post('/', async (req, res) => {
     try{
         const assignment = new ProjectAssignment(req.body);
@@ -13,6 +15,7 @@ router.post('/', async (req, res) => {
     }
     });
 
+// GET /api/project-assignments
 router.get('/', async (req, res) => {
     try{
         const assignments = await ProjectAssignment.find()
@@ -25,4 +28,5 @@ router.get('/', async (req, res) => {
         }
     });
 
+// export the projectAssignment router
 export default router;
