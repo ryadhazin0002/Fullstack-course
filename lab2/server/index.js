@@ -16,6 +16,8 @@ app.use(cors({
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
 }));
+
+// Body parser middleware
 app.use(express.json());
 
 const PORT = process.env.PORT || 5000;
@@ -41,6 +43,7 @@ app.get('/', (req, res) => {
   res.send('Server is running');
 });
 
+// Health check endpoint for the database
 app.get('/api/health', (req, res) => {
   res.json({ 
     status: 'healthy',
@@ -57,7 +60,6 @@ app.use((err, req, res, next) => {
 
 // Start server
 app.listen(PORT, async (error) => {
-  console.log(error);
   console.log(`Server is running on port ${PORT}...`);
   await initializeDatabase();
 });

@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 
+
+// This component fetches and displays project assignments from the server
 function AssignmentTable() {
     const [data, setData] = useState([]);
     const [sortField, setSortField] = useState("start_date");
@@ -8,8 +10,10 @@ function AssignmentTable() {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
+    // Fetch data from the server
     const fetchData = React.useCallback(async () => {
         try {
+            
             setLoading(true);
             const res = await axios.get('http://localhost:5000/api/project-assignments');
             
