@@ -11,8 +11,10 @@ const app = express();
 // Middleware
 app.use(logger('dev'));
 app.use(cors({
-  origin: 'http://localhost:5173',
+  origin: '*',
   credentials: true, // Allow credentials
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
 }));
 app.use(express.json());
 
@@ -54,7 +56,8 @@ app.use((err, req, res, next) => {
 });
 
 // Start server
-app.listen(PORT, async () => {
+app.listen(PORT, async (error) => {
+  console.log(error);
   console.log(`Server is running on port ${PORT}...`);
   await initializeDatabase();
 });
