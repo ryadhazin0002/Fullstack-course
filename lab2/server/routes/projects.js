@@ -1,8 +1,10 @@
 import express from 'express';
 import Project from '../model/Project.js';
 
+// Define the routes for the project collection
 const router = express.Router();
 
+// POST /api/projects
 router.post('/', async (req, res) => {
     try{
         const existing = await Project.findOne({project_code: req.query.project_code});
@@ -19,4 +21,6 @@ router.post('/', async (req, res) => {
 }
 );
 
+
+// export project router
 export default router;
