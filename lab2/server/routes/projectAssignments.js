@@ -16,8 +16,8 @@ router.post('/', async (req, res) => {
 router.get('/', async (req, res) => {
     try{
         const assignments = await ProjectAssignment.find()
-            .populate('employees')
-            .populate('projects');
+            .populate('employee')
+            .populate('project');
         res.json(assignments);
 
     }catch (error) {

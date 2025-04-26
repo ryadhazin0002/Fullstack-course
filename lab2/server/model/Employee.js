@@ -7,4 +7,4 @@ const employeeSchema = new mongoose.Schema({
     hashed_password: { type: String }
 });
 
-export default mongoose.model('Employee', employeeSchema);
+export default mongoose.model('employees', employeeSchema);
